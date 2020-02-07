@@ -1,6 +1,7 @@
 const socketio           = require('socket.io');
 const mongoose           = require('mongoose');
 const issueTrackerModel  = mongoose.model('issueTracker');
+const userModal          = mongoose.model('Users'); //Importing Models
 //const eventScheduler  = require('scheduled-event-emitter');
 //const emitter = new eventScheduler();
 
@@ -117,30 +118,6 @@ let setServer = (server)=>{
         })
       }
 
-
-      
-    //    issueTrackerModel.updateOne({issueId:data.issueId},options,{multi:true},{new:true})
-    //     .exec((err,result)=>{
-    //     if(err){
-    //       console.log(err);
-    //     }else if(checkLib.isEmpty(result)){
-    //       console.log('Event not saved');
-    //     }else{
-    //       let response = apiResponse.generate(false,'Event Data Updated',200,eventData);
-    
-    //       for(let a of eventData.attendees){
-              
-    //           myIo.emit(a.name,response);
-    //           attendees_name.push(a.name);
-    //        }
-          
-    //          emitReminder(eventData.eventId);  
-
-    //           eventData.type = 'Meeting Details Updated';
-    //           mailTemplate.createMail(eventData);
-    //    } //If else statement
-
-    // }); //Emitting notification to all attendees
     }); //Updating event
 
     socket.on('delete-event',(eventData)=>{
@@ -184,7 +161,7 @@ let setServer = (server)=>{
    
    let emitNotification = (data,type) =>{
 
-    console.log("Update Id "+data.issueId)
+    //console.log("Update Id "+data.issueId)
    let notifyArrayList   = []; 
    let allEvents;
     issueTrackerModel.find({issueId:data.issueId})
@@ -196,31 +173,55 @@ let setServer = (server)=>{
       console.log("No Data found");
      }else{
 
-        notifyArrayList.push(result[0].assignee);
-        notifyArrayList.push(result[0].reportedBy);
-        if(result[0].watcher.length > 0){
-          notifyArrayList.concat(result[0].watcher);
+      let issueData = {
+        type              : type,
+        notificationText  :`Data created/updated by ${data.updatedBy}`,
+        data              : data
+      }
+
+
+        if(type == "New"){
+
+          userModal.find()
+          .exec((err,result)=>{
+            if(err){
+              console.log(err)
+            }
+            else{
+                result.forEach((user)=>{   
+                  myIo.emit(user.userId,issueData);  
+                })
+              }
+            }) //CRUD find Users ends here
+
         }
-        // if(result.watcher.length > 0){
-        //   notifyArrayList.concat(result.watcher);
-        // }
-        console.log("Length"+result[0].watcher.length);
-          let issueData = {
-            type              : type,
-            notificationText  :`Data created/updated by ${data.updatedBy}`,
-            data              : data
+        else{
+
+
+          notifyArrayList.push(result[0].assignee);
+          notifyArrayList.push(result[0].reportedBy);
+          if(result[0].watcher.length > 0){
+            notifyArrayList.concat(result[0].watcher);
           }
-     
-     notifyArrayList.forEach((user)=>{
-      console.log("Notify User"+ user);
-      myIo.emit(user,issueData);
-     })     
-     
-     if(result[0].watcher.length > 0){
-      result[0].watcher.forEach((user)=>{
-        console.log("Watcher User"+ user);
+          // if(result.watcher.length > 0){
+          //   notifyArrayList.concat(result.watcher);
+          // }
+          console.log("Length"+result[0].watcher.length);
+        
+       
+       notifyArrayList.forEach((user)=>{
+        console.log("Notify User"+ user);
         myIo.emit(user,issueData);
-      })
+       })     
+       
+       if(result[0].watcher.length > 0){
+        result[0].watcher.forEach((user)=>{
+          console.log("Watcher User"+ user);
+          myIo.emit(user,issueData);
+        })
+
+        }
+     
     }
      //console.log(result);      
      
@@ -235,7 +236,7 @@ let setServer = (server)=>{
   //  }
   // });
 
-  } //Timer events 
+  } //Emit Notification ends here
     
 
 } //End of setServer
