@@ -54,7 +54,7 @@ let createNewEvent = (req,res)=>{
 
 
 let getIssueData = (req,res) =>{
-    console.log(req.body.issueId);
+    //console.log(req.body.issueId);
     issueTrackerModel.find({issueId:req.body.issueId})
     .exec((err,result)=>{
         if(err){
@@ -64,7 +64,7 @@ let getIssueData = (req,res) =>{
             res.send(response);
         }else{
             logger.info("Issue Data Feteched","eventsConissueTracker:getIssueData",1);
-            console.log(result);
+           // console.log(result);
             let response = apiResponse.generate(false,'Issue data found',200,result);
             //console.log(response);
             res.send(response);
@@ -86,7 +86,7 @@ let getAllIssueData = (req,res) =>{
             res.send(response);
         }else{
             logger.info("Issue Data Feteched","issueTracker:getAllIssueData",1);
-            console.log(result);
+           // console.log(result);
             let response = apiResponse.generate(false,'Issue data found',200,result);
             //console.log(response);
             res.send(response);

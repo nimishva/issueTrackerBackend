@@ -32,7 +32,7 @@ let setServer = (server)=>{
               socket.emit('token-error',{status:403,message:'Token not valid/expired'});
             }else{
               let currentUser = tokenData.data;
-              console.log(currentUser.username);
+             // console.log(currentUser.username);
               socket.username   = currentUser.userId;
              // socket.emit(currentUser.userId,"You are online");
             //  console.log("set usr online");
@@ -183,6 +183,8 @@ let setServer = (server)=>{
    }); //Main Socket Connecton 
    
    let emitNotification = (data,type) =>{
+
+    console.log("Update Id "+data.issueId)
    let notifyArrayList   = []; 
    let allEvents;
     issueTrackerModel.find({issueId:data.issueId})
@@ -202,7 +204,7 @@ let setServer = (server)=>{
         // if(result.watcher.length > 0){
         //   notifyArrayList.concat(result.watcher);
         // }
-       // console.log(notifyArrayList);
+        console.log("Length"+result[0].watcher.length);
           let issueData = {
             type              : type,
             notificationText  :`Data created/updated by ${data.updatedBy}`,
@@ -210,10 +212,16 @@ let setServer = (server)=>{
           }
      
      notifyArrayList.forEach((user)=>{
-       console.log(user);
+      console.log("Notify User"+ user);
       myIo.emit(user,issueData);
      })     
      
+     if(result[0].watcher.length > 0){
+      result[0].watcher.forEach((user)=>{
+        console.log("Watcher User"+ user);
+        myIo.emit(user,issueData);
+      })
+    }
      //console.log(result);      
      
     //let startDt = new Date(events.start - 60000) ;    

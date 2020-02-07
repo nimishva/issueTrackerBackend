@@ -88,89 +88,6 @@ let setRouter = (app) =>{
 	   }
 	 */
 
-
-    //Forgot password
-    app.post(`${baseUrl}/forgotPassword`,userController.resetPassword);
-    
-    /**
-	 * @api {get} /api/v1/users/forgotPassword Forgotpassword
-	 * @apiVersion 0.0.1
-	 * @apiGroup read
-	 *
-    * @apiParam {String} authToken The token for authentication.(Send authToken as query parameter, body parameter or as a header)
-	 *
-	 *  @apiSuccessExample {json} Success-Response:
-	 *  {
-	    "error": false,
-	    "message": "Mail has been sent",
-	    "status": 200,
-        "data": [      
-                    authToken :"authorization token",
-                    userData :   
-                                {
-						            userId: "string",
-					            	username: "string",
-						            firstName: "string",
-						            lastName: "string",
-						            email: string,
-						            mobile: number,
-						            createdOn: "date"
-					             }
-	    		]
-	    	}
-		}
-	}
-	  @apiErrorExample {json} Error-Response:
-	 *
-	 * {
-	    "error": true,
-	    "message": "Data Fetching error,Please try again",
-	    "status": 500,
-	    "data": null
-	   }
-	 */
-
-
-    //Forgot password
-    app.post(`${baseUrl}/resetpassword`,userController.UpdateNewPassword);
-
-     /**
-	 * @api {get} /api/v1/users/resetpassword Reset Password
-	 * @apiVersion 0.0.1
-	 * @apiGroup read
-	 *
-	 *
-	 *  @apiSuccessExample {json} Success-Response:
-	 *  {
-	    "error": false,
-	    "message": "New password updated",
-	    "status": 200,
-	    "data": [
-                  {
-						            userId: "string",
-					            	username: "string",
-						            firstName: "string",
-						            lastName: "string",
-						            email: string,
-						            mobile: number,
-						            createdOn: "date"
-				 }
-	    		]
-	    	}
-		}
-	}
-	  @apiErrorExample {json} Error-Response:
-	 *
-	 * {
-	    "error": true,
-	    "message": "Password updation error,Please try again",
-	    "status": 500,
-	    "data": null
-	   }
-	 */
-
-
-
     //get all data route
     app.get(`${baseUrl}/getAll`,userController.getAllData);
 
@@ -212,10 +129,82 @@ let setRouter = (app) =>{
 
 
     //get userid  by name
-    app.post(`${baseUrl}/getUserIdByName`,userController.getUserId);
+	app.post(`${baseUrl}/getUserIdByName`,userController.getUserId);
+	
+	  /**
+	 * @api {get} /api/v1/users/getUserIdByName Get users by Id
+	 * @apiVersion 0.0.1
+	 * @apiGroup read
+	 *
+	 *
+	 *  @apiSuccessExample {json} Success-Response:
+	 *  {
+	    "error": false,
+	    "message": "Data Found",
+	    "status": 200,
+	    "data": [
+					{
+						userId: "string",
+						username: "string",
+						firstName: "string",
+						lastName: "string",
+						email: string,
+						mobile: number,
+						createdOn: "date"
+					}
+	    		]
+	    	}
+		}
+	}
+	  @apiErrorExample {json} Error-Response:
+	 *
+	 * {
+	    "error": true,
+	    "message": "Data fetching error",
+	    "status": 500,
+	    "data": null
+	   }
+	 */
+
 
      //get userList
-    app.get(`${baseUrl}/getUsersList`,userController.getUsersList);
+	app.get(`${baseUrl}/getUsersList`,userController.getUsersList);
+	
+	  /**
+	 * @api {get} /api/v1/users/getUsersList Get all Users
+	 * @apiVersion 0.0.1
+	 * @apiGroup read
+	 *
+	 *
+	 *  @apiSuccessExample {json} Success-Response:
+	 *  {
+	    "error": false,
+	    "message": "Data Found",
+	    "status": 200,
+	    "data": [
+					{
+						userId: "string",
+						username: "string",
+						firstName: "string",
+						lastName: "string",
+						email: string,
+						mobile: number,
+						createdOn: "date"
+					}
+	    		]
+	    	}
+		}
+	}
+	  @apiErrorExample {json} Error-Response:
+	 *
+	 * {
+	    "error": true,
+	    "message": "Data fetching error",
+	    "status": 500,
+	    "data": null
+	   }
+	 */
+
 
 };
 

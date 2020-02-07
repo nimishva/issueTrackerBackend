@@ -7,46 +7,6 @@ let setRouter = (app) =>{
 
    let baseUrl = `${appConfig.apiVersion}/issueTracker`; //Declaring baseUrl 
 
-
-    app.post(`${baseUrl}/newEvent`,eventController.createNewEvent);
-
-    /**
-	 * @api {post} /api/v1/events/newEvent Create New Event
-	 * @apiVersion 0.0.1
-	 * @apiGroup read
-	 *
-	 *
-	 *  @apiSuccessExample {json} Success-Response:
-	 *  {
-	    "error": false,
-	    "message": "New event Created",
-	    "status": 200,
-	    "data": [
-					{
-						eventId: "string",
-						start: "date",
-						end: "date",
-						title: "string",
-						attendees: array,
-						location: string,
-						description: "string",
-						author: "string",
-						createdBy: string
-					}
-	    		]
-	    	}
-		}
-	}
-	  @apiErrorExample {json} Error-Response:
-	 *
-	 * {
-	    "error": true,
-	    "message": "Failed To create new event",
-	    "status": 500,
-	    "data": null
-	   }
-	 */
-
      app.post(`${baseUrl}/getIssuedata`,eventController.getIssueData);
 
         /**
@@ -58,19 +18,18 @@ let setRouter = (app) =>{
 	 *  @apiSuccessExample {json} Success-Response:
 	 *  {
 	    "error": false,
-	    "message": "Event data found",
+	    "message": "Issue data found",
 	    "status": 200,
 	    "data": [
 					{
-						eventId: "string",
-						start: "date",
-						end: "date",
+						issueId: "string",
 						title: "string",
-						attendees: array,
-						location: string,
-						description: "string",
-						author: "string",
-						createdBy: string
+						Description: "string",
+						status: "string",
+						assignee: string,
+						watcher: array,
+						comments: "array",
+						reportedBy: "string",
 					}
 	    		]
 	    	}
@@ -80,7 +39,7 @@ let setRouter = (app) =>{
 	 *
 	 * {
 	    "error": true,
-	    "message": "Failed To fetch event data",
+	    "message": "Failed To fetch issue data",
 	    "status": 500,
 	    "data": null
 	   }
@@ -90,7 +49,7 @@ let setRouter = (app) =>{
 	app.get(`${baseUrl}/getAllIssuedata`,eventController.getAllIssueData);
 
 	/**
- * @api {get} /api/v1/events/getAllEvents Get All Event Data
+ * @api {get} /api/v1/issueTracker/getAllIssuedata Get All getAllIssuedata 
  * @apiVersion 0.0.1
  * @apiGroup read
  *
@@ -98,19 +57,18 @@ let setRouter = (app) =>{
  *  @apiSuccessExample {json} Success-Response:
  *  {
 	"error": false,
-	"message": "Event data found",
+	"message": "Issue data found",
 	"status": 200,
 	"data": [
 				{
-					eventId: "string",
-					start: "date",
-					end: "date",
+					issueId: "string",
 					title: "string",
-					attendees: array,
-					location: string,
-					description: "string",
-					author: "string",
-					createdBy: string
+					Description: "string",
+					status: "string",
+					assignee: string,
+					watcher: array,
+					comments: "array",
+					reportedBy: "string",
 				}
 			]
 		}
@@ -120,7 +78,7 @@ let setRouter = (app) =>{
  *
  * {
 	"error": true,
-	"message": "Failed To fetch event data",
+	"message": "Failed To fetch issue data",
 	"status": 500,
 	"data": null
    }
