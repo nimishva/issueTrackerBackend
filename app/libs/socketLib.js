@@ -33,17 +33,13 @@ let setServer = (server)=>{
               socket.emit('token-error',{status:403,message:'Token not valid/expired'});
             }else{
               let currentUser = tokenData.data;
-             // console.log(currentUser.username);
               socket.username   = currentUser.userId;
-             // socket.emit(currentUser.userId,"You are online");
-            //  console.log("set usr online");
             }
         })
 
     }) //Verifying token and Setting user online
 
     socket.on('new-issue',(issueData)=>{
-      
       issueData.issueId = shortId.generate();
       let newIssue = new issueTrackerModel(issueData);
       newIssue.save((err,result)=>{
@@ -52,15 +48,10 @@ let setServer = (server)=>{
         }else if(checkLib.isEmpty(result)){
           console.log('issueData not saved');
         }else{
-
           console.log(result);
       let response = apiResponse.generate(false,'New issueTacker Created',200,issueData);
           issueData.updatedDataType = "New";
           emitNotification(issueData,"New");
-      
-
-      //  for(let a of issueData.attendees){
-      //   myIo.emit(a.name,response);
       
       //   }
 
@@ -68,8 +59,6 @@ let setServer = (server)=>{
 
     }) //Emitting notification to all attendees
     });
-
-
     socket.on('update-issueData',(data)=>{
       let updatedData ;
       let updatedDataType = data.updatedDataType;
@@ -120,25 +109,25 @@ let setServer = (server)=>{
 
     }); //Updating event
 
-    socket.on('delete-event',(eventData)=>{
-      // console.log(eventData);
-       eventModel.remove({eventId:eventData.eventId})
-        .exec((err,result)=>{
-        if(err){
-          console.log(err);
-        }else if(checkLib.isEmpty(result)){
-          console.log('Event not deleted');
-        }else{
+    // socket.on('delete-event',(eventData)=>{
+    //   // console.log(eventData);
+    //    eventModel.remove({eventId:eventData.eventId})
+    //     .exec((err,result)=>{
+    //     if(err){
+    //       console.log(err);
+    //     }else if(checkLib.isEmpty(result)){
+    //       console.log('Event not deleted');
+    //     }else{
           
-          let response = apiResponse.generate(false,'Event Deleted',200,eventData);
-          for(let a of eventData.attendees){
-          myIo.emit(a.name,response);
-        }
-          emitReminder(eventData.eventId);
-        } //If else statement
+    //       let response = apiResponse.generate(false,'Event Deleted',200,eventData);
+    //       for(let a of eventData.attendees){
+    //       myIo.emit(a.name,response);
+    //     }
+    //     emitNotification(eventData.eventId);
+    //     } //If else statement
 
-    }); //Emitting notification to all attendees
-    }); //Updating event
+    // }); //Emitting notification to all attendees
+    // }); //Updating event
 
     socket.on('delete-comment',(data)=>{
       issueTrackerModel.updateOne({issueId:data.issueId},{ $pull: { comments: { id: data.id } } })
@@ -155,12 +144,11 @@ let setServer = (server)=>{
     }) //Delete comment ends here..
     // socket.room = 'resefeber';
     // socket.
-
-   
    }); //Main Socket Connecton 
    
    let emitNotification = (data,type) =>{
 
+    console.log("Emitting Notification");
     //console.log("Update Id "+data.issueId)
    let notifyArrayList   = []; 
    let allEvents;
@@ -197,26 +185,21 @@ let setServer = (server)=>{
         }
         else{
 
-
           notifyArrayList.push(result[0].assignee);
           notifyArrayList.push(result[0].reportedBy);
-          if(result[0].watcher.length > 0){
+
+          if(result[0].watcher.length > 0){ 
             notifyArrayList.concat(result[0].watcher);
           }
-          // if(result.watcher.length > 0){
-          //   notifyArrayList.concat(result.watcher);
-          // }
-          console.log("Length"+result[0].watcher.length);
-        
-       
+         
        notifyArrayList.forEach((user)=>{
-        console.log("Notify User"+ user);
+        //console.log("Notify User"+ user);
         myIo.emit(user,issueData);
        })     
        
        if(result[0].watcher.length > 0){
         result[0].watcher.forEach((user)=>{
-          console.log("Watcher User"+ user);
+          //sconsole.log("Watcher List"+ user);
           myIo.emit(user,issueData);
         })
 
